@@ -3,5 +3,6 @@ module.exports = {
   SENSE_PORT: 443,
   SENSE_PROXY: 'hefesto',
   USER_DIRECTORY: 'HEFESTO', 
-  APPLICATION_PORT: '3000'
+  APPLICATION_PORT: '3000',
+  REDIRECT_URL: 'http://18.188.176.55/'
 };

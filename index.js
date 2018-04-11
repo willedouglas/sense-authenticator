@@ -29,6 +29,10 @@ app.all('/*', function(req, res, next) {
   next();
 });
 
+app.get('/', function(req, res) {
+  res.redirect(process.env.REDIRECT_URL);
+});
+
 app.post('/login', function(req, res) {
   QRS.getTicket(req.body.username, function(error, ticket) {
     if (ticket) {
@@ -38,7 +42,7 @@ app.post('/login', function(req, res) {
   })
 });
 
-app.post('/logout', function(req, res) {
+app.delete('/logout', function(req, res) {
   QRS.logout(req.body.username, function(error) {
     if (error) {
       return res.status(500).send({ status: false, error: error });  

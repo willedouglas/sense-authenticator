@@ -40,6 +40,7 @@ app.post('/login', (req, res) => {
 
 app.delete('/logout/:session_user', (req, res) => {
   QRS.logout(req.params.session_user, (error, session) => {
+    console.log('passou');
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
     } 

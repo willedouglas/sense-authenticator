@@ -21,6 +21,7 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
+app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -47,7 +48,5 @@ app.delete('/logout/:session_user', (req, res, next) => {
     return res.status(500).send({ status: false, error: error }); 
   })
 });
-
-app.options('*', cors());
 
 app.listen(process.env.APPLICATION_PORT, () => { console.info('==> Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', process.env.APPLICATION_PORT, process.env.APPLICATION_PORT); });

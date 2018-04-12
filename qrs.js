@@ -27,12 +27,39 @@ module.exports = {
     });
   },
   logout: function(user, callbackFn) {
-    this.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/user/" + process.env.USER_DIRECTORY + "/" + user, function(err) {
+    var me = this;
+
+    me.qGet(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/", function(err, sessionsResponse) {
       if (err) {
         callbackFn(err);
       }
       else {
-        callbackFn(null);
+        var sessions = JSON.parse(sessionsResponse);
+        var hasSessions = sessions.length > 0;
+
+        if (hasSessions) {
+          var sessionsUser = sessions.filter(s => s.UserDirectory === process.env.USER_DIRECTORY && s.UserId === user);
+          var hasSessionsUser = sessionsUser.length > 0;
+
+          if (hasSessionsUser) {
+            sessionsUser.forEach(s => {
+              me.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + s.SessionId, function(err, sessionsUserResponse) {
+                var session = JSON.parse(sessionsUserResponse);
+
+                if (session.Session) {
+                  callbackFn(null, session.Session);
+                }
+                else {
+                  callbackFn({ message: "Falha ao realizar a leitura da sessão." }, null);
+                }        
+              });
+            });
+          } else {
+            callbackFn({ message: "Nenhuma sessão aberta para o usuário " + user + "." }, null);  
+          }
+        } else {
+          callbackFn({ message: "Nenhuma sessão aberta." }, null);
+        }
       }
     });
   },
@@ -46,6 +73,8 @@ module.exports = {
     return value.join('');
   },
   qGet: function(api, url, callbackFn) {
+    var me = this;
+
     try {
       var cert = fs.readFileSync(process.env.certPath + '/client.pem');
       var key = fs.readFileSync(process.env.certPath + '/client_key.pem');
@@ -54,7 +83,7 @@ module.exports = {
       return;
     }
 
-    var xrfkey = this.generateXrfkey();
+    var xrfkey = me.generateXrfkey();
     var settings = {
       method: 'GET',
       headers: {
@@ -69,12 +98,12 @@ module.exports = {
     if (url.indexOf("http") != -1) {
       settings.host = Url.parse(url).hostname;
       settings.port = Url.parse(url).port;
-      settings.path = Url.parse(url).path+'?xrfkey='+xrfkey;
+      settings.path = Url.parse(url).path + '?xrfkey=' + xrfkey;
     }
     else {
       settings.host = process.env.SENSE_SERVER;
       settings.port = api;
-      settings.path = url+'?xrfkey='+xrfkey;
+      settings.path = url + '?xrfkey=' + xrfkey;
     }
     
     var data = "";
@@ -91,6 +120,8 @@ module.exports = {
     });
   },
   qDelete: function(api, url, callbackFn) {
+    var me = this;
+
     try {
       var cert = fs.readFileSync(process.env.certPath + '/client.pem');
       var key = fs.readFileSync(process.env.certPath + '/client_key.pem');
@@ -99,7 +130,7 @@ module.exports = {
       return;
     }
 
-    var xrfkey = this.generateXrfkey();
+    var xrfkey = me.generateXrfkey();
     var settings = {
       method: 'DELETE',
       headers: {
@@ -115,12 +146,12 @@ module.exports = {
     if (url.indexOf("http") != -1) {
       settings.host = Url.parse(url).hostname;
       settings.port = Url.parse(url).port;
-      settings.path = Url.parse(url).path+'?xrfkey='+xrfkey;
+      settings.path = Url.parse(url).path + '?xrfkey=' + xrfkey;
     }
     else {
       settings.host = process.env.SENSE_SERVER;
       settings.port = api;
-      settings.path = url+'?xrfkey='+xrfkey;
+      settings.path = url + '?xrfkey=' + xrfkey;
     }
     
     var data = "";
@@ -137,6 +168,8 @@ module.exports = {
     });
   },
   qPost: function(api, url, data, callbackFn) {
+    var me = this;
+  
     try {
       var cert = fs.readFileSync(process.env.certPath + '/client.pem');
       var key = fs.readFileSync(process.env.certPath + '/client_key.pem');
@@ -145,7 +178,7 @@ module.exports = {
       return;
     }
 
-    var xrfkey = this.generateXrfkey();
+    var xrfkey = me.generateXrfkey();
     var settings = {
       method: 'POST',
       headers: {

@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities');  
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
   next();
 });
 
@@ -44,12 +44,11 @@ app.post('/login', function(req, res) {
 });
 
 app.delete('/logout', function(req, res) {
-  QRS.logout(req.body.username, function(error) {
-    if (error) {
-      return res.status(500).send({ status: false, error: error });  
+  QRS.logout(req.body.username, function(error, session) {
+    if (session) {
+      return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
     }
-
-    return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.' }});
+    return res.status(500).send({ status: false, error: error }); 
   })
 });
 

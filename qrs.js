@@ -42,16 +42,20 @@ module.exports = {
           var hasSessionsUser = sessionsUser.length > 0;
 
           if (hasSessionsUser) {
-            sessionsUser.forEach(s => {
+            sessionsUser.forEach(s, i => {
               me.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + s.SessionId, function(err, sessionsUserResponse) {
                 var session = JSON.parse(sessionsUserResponse);
 
-                if (session.Session) {
-                  callbackFn(null, session.Session);
+                // Início da Gambiarra
+                if (i.length === i.length - 1) {
+                  if (session.Session) {
+                    callbackFn(null, session.Session);
+                  }
+                  else {
+                    callbackFn({ message: "Falha ao realizar a leitura da sessão." }, null);
+                  }  
                 }
-                else {
-                  callbackFn({ message: "Falha ao realizar a leitura da sessão." }, null);
-                }        
+                // Fim da Gambiarra     
               });
             });
           } else {

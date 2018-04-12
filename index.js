@@ -26,16 +26,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  res.redirect(process.env.REDIRECT_URL);
+  return res.redirect(process.env.REDIRECT_URL);
 });
 
 app.post('/login', (req, res) => {
   QRS.getTicket(req.body.username, (error, ticket) => {
     if (ticket) {
       return res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
-    } else {
-      return res.status(500).json({ status: false, error: error });
     }
+    return res.status(500).json({ status: false, error: error });
   })
 });
 
@@ -43,9 +42,8 @@ app.delete('/logout/:session_user', (req, res) => {
   QRS.logout(req.params.session_user, (error, session) => {
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
-    } else {
-      return res.status(500).json({ status: false, error: error }); 
-    }
+    } 
+    return res.status(500).json({ status: false, error: error }); 
   })
 });
 

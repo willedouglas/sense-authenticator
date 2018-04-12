@@ -21,7 +21,7 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
-app.use(cors({ origin: '*'}));
+app.use(cors({ origin: '*' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -33,8 +33,9 @@ app.post('/login', (req, res) => {
   QRS.getTicket(req.body.username, (error, ticket) => {
     if (ticket) {
       return res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
+    } else {
+      return res.status(500).json({ status: false, error: error });
     }
-    return res.status(500).json({ status: false, error: error });
   })
 });
 
@@ -42,8 +43,9 @@ app.delete('/logout/:session_user', (req, res) => {
   QRS.logout(req.params.session_user, (error, session) => {
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
+    } else {
+      return res.status(500).json({ status: false, error: error }); 
     }
-    return res.status(500).json({ status: false, error: error }); 
   })
 });
 

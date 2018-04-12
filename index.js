@@ -43,8 +43,8 @@ app.post('/login', function(req, res) {
   })
 });
 
-app.delete('/logout', function(req, res) {
-  QRS.logout(req.body.username, function(error, session) {
+app.delete('/logout/:session_user', function(req, res) {
+  QRS.logout(req.params.session_user, function(error, session) {
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
     }

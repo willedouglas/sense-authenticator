@@ -29,7 +29,7 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities',
     'Access-Control-Allow-Methods': 'GET, POST, DELETE'
   });
-  next();
+  return next();
 });
 
 app.get('/', (req, res) => {

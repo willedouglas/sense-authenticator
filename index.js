@@ -25,13 +25,13 @@ app.use(cors({ origin: '*' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
   res.redirect(process.env.REDIRECT_URL);
 
   return next();
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', (req, res, next) => {
   QRS.getTicket(req.body.username, (error, ticket) => {
     if (ticket) {
       res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
@@ -43,7 +43,7 @@ app.post('/login', (req, res) => {
   })
 });
 
-app.delete('/logout/:session_user', (req, res) => {
+app.delete('/logout/:session_user', (req, res, next) => {
   QRS.logout(req.params.session_user, (error, session) => {
     if (session) {
       res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  

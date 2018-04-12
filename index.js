@@ -23,19 +23,22 @@ process.env.certPath = path.join(__dirname, 'config/certificates');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities');  
-  res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE');
+app.use(req, res, next => {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE'
+  });
+  
   next();
 });
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
   res.redirect(process.env.REDIRECT_URL);
 });
 
-app.post('/login', function(req, res) {
-  QRS.getTicket(req.body.username, function(error, ticket) {
+app.post('/login', (req, res) => {
+  QRS.getTicket(req.body.username, (error, ticket) => {
     if (ticket) {
       return res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
     }
@@ -43,8 +46,8 @@ app.post('/login', function(req, res) {
   })
 });
 
-app.delete('/logout/:session_user', function(req, res) {
-  QRS.logout(req.params.session_user, function(error, session) {
+app.delete('/logout/:session_user', (req, res) => {
+  QRS.logout(req.params.session_user, (error, session) => {
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
     }

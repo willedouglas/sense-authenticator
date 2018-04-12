@@ -23,14 +23,14 @@ process.env.certPath = path.join(__dirname, 'config/certificates');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE'
-  });
-  return next();
-});
+// app.use((req, res, next) => {
+//   res.set({
+//     'Access-Control-Allow-Origin': '*',
+//     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities',
+//     'Access-Control-Allow-Methods': 'GET, POST, DELETE'
+//   });
+//   return next();
+// });
 
 app.get('/', (req, res) => {
   res.redirect(process.env.REDIRECT_URL);

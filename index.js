@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require('path');
 const QRS = require("./qrs");
+const cors = require('cors');
 const https = require("https");
 const app = require('express')();
 const bodyParser = require('body-parser');
@@ -20,17 +21,13 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
+const corsOptions = {
+  origin: '*'
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// app.use((req, res, next) => {
-//   res.set({
-//     'Access-Control-Allow-Origin': '*',
-//     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, x-qlik-capabilities',
-//     'Access-Control-Allow-Methods': 'GET, POST, DELETE'
-//   });
-//   return next();
-// });
 
 app.get('/', (req, res) => {
   res.redirect(process.env.REDIRECT_URL);

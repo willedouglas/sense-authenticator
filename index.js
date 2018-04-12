@@ -21,33 +21,37 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
-const corsOptions = {
-  origin: '*'
-};
-
-app.use(cors(corsOptions));
+app.use(cors({ origin: '*' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.redirect(process.env.REDIRECT_URL);
+
+  return next();
 });
 
 app.post('/login', (req, res) => {
   QRS.getTicket(req.body.username, (error, ticket) => {
     if (ticket) {
-      return res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
+      res.status(200).json({ status: true, result: { message: 'Autenticado com sucesso.', ticket: ticket.Ticket }});
+    } else {
+      res.status(500).send({ status: false, error: error });
     }
-    return res.status(500).send({ status: false, error: error });
+
+    return next();
   })
 });
 
 app.delete('/logout/:session_user', (req, res) => {
   QRS.logout(req.params.session_user, (error, session) => {
     if (session) {
-      return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
+      res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
+    } else {
+      res.status(500).send({ status: false, error: error }); 
     }
-    return res.status(500).send({ status: false, error: error }); 
+
+    return next();
   })
 });
 

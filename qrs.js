@@ -26,7 +26,7 @@ module.exports = {
       }
     });
   },
-  getOpenSessions: function(user, callbackFn) {
+  getSessions: function(user, callbackFn) {
     var me = this;
 
     me.qGet(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/", function(err, sessionsResponse) {
@@ -37,8 +37,9 @@ module.exports = {
         var hasSessions = sessions.length > 0;
 
         if (hasSessions) {
+          var hasUser = !!user;
           var sessionsUser = sessions.filter(s => s.UserDirectory === process.env.USER_DIRECTORY && s.UserId === user);
-          callbackFn(null, sessionsUser);
+          callbackFn(null, hasUser ? sessionsUser : sessions);
         } else {
           callbackFn({ message: "Sem sessões para esse usuário." }, null);
         }

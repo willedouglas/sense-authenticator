@@ -38,8 +38,17 @@ app.post('/login', (req, res) => {
   })
 });
 
+app.get('/session/', (req, res) => {
+  QRS.getSessions(null, (error, sessions) => {
+    if (sessions) {
+      return res.status(200).json({ status: true, result: sessions });  
+    } 
+    return res.status(500).json({ status: false, error: error }); 
+  })
+});
+
 app.get('/session/:session_user', (req, res) => {
-  QRS.logout(req.params.session_user, (error, sessions) => {
+  QRS.getSessions(req.params.session_user, (error, sessions) => {
     if (sessions) {
       return res.status(200).json({ status: true, result: sessions });  
     } 

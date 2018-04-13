@@ -26,43 +26,39 @@ module.exports = {
       }
     });
   },
-  logout: function(user, callbackFn) {
+  getOpenSessions: function(user, callbackFn) {
     var me = this;
 
     me.qGet(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/", function(err, sessionsResponse) {
       if (err) {
         callbackFn(err);
-      }
-      else {
+      } else {
         var sessions = JSON.parse(sessionsResponse);
         var hasSessions = sessions.length > 0;
 
         if (hasSessions) {
           var sessionsUser = sessions.filter(s => s.UserDirectory === process.env.USER_DIRECTORY && s.UserId === user);
-          var hasSessionsUser = sessionsUser.length > 0;
-
-          if (hasSessionsUser) {
-            sessionsUser.forEach(s, i => {
-              me.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + s.SessionId, function(err, sessionsUserResponse) {
-                var session = JSON.parse(sessionsUserResponse);
-
-                // Início da Gambiarra
-                if (i.length === i.length - 1) {
-                  if (session.Session) {
-                    callbackFn(null, session.Session);
-                  }
-                  else {
-                    callbackFn({ message: "Falha ao realizar a leitura da sessão." }, null);
-                  }  
-                }
-                // Fim da Gambiarra     
-              });
-            });
-          } else {
-            callbackFn({ message: "Nenhuma sessão aberta para o usuário " + user + "." }, null);  
-          }
+          callbackFn(null, sessionsUser);
         } else {
-          callbackFn({ message: "Nenhuma sessão aberta." }, null);
+          callbackFn({ message: "Sem sessões para esse usuário." }, null);
+        }
+      }
+    });
+  },
+  logout: function(sessionId, callbackFn) {
+    var me = this;
+
+    me.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + sessionId, function(err, sessionUserResponse) {
+      if (err) {
+        callbackFn(err);
+      } else {
+        var sessionUser = JSON.parse(sessionUserResponse);
+
+        if (sessionUser) {
+          callbackFn(null, sessionUser);
+        }
+        else {
+          callbackFn({ message: "Falha ao excluir a sessão." }, null);
         }
       }
     });

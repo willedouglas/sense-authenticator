@@ -5,6 +5,7 @@ const app = require('express')();
 const cors = require('./src/cors');
 const routes = require('./src/routes');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 try {
   const config = require('./config/config');
@@ -21,6 +22,7 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 cors(app);

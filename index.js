@@ -1,5 +1,4 @@
 const fs = require("fs");
-const cors = require('cors');
 const path = require('path');
 const https = require('https');
 const app = require('express')();
@@ -25,7 +24,6 @@ process.env.certPath = path.join(__dirname, 'config/certificates');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors({ origin: '*' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 headers(app);
 routes(app);

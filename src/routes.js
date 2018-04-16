@@ -2,7 +2,6 @@ const QRS = require("./qrs");
 
 module.exports = app => { 
   app.get('/', (req, res) => {
-    res.cookie('name', 'express').send('cookie set');
     return res.redirect(process.env.REDIRECT_URL);
   });
 

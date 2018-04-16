@@ -1,10 +1,11 @@
 const fs = require("fs");
+const cors = require('cors');
 const path = require('path');
 const https = require('https');
 const app = require('express')();
-const cors = require('./src/cors');
 const routes = require('./src/routes');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 try {
   const config = require('./config/config');
@@ -21,9 +22,11 @@ catch(err) {
 process.env.appRoot = __dirname;
 process.env.certPath = path.join(__dirname, 'config/certificates');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(bodyParser.json());
-cors(app);
+app.use(cors({ origin: '*' }));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 routes(app);
 
 app.listen(process.env.APPLICATION_PORT, () => { console.info('==> Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', process.env.APPLICATION_PORT, process.env.APPLICATION_PORT); });

@@ -7,10 +7,10 @@ module.exports = app => {
 		secret: process.env.SENSE_PROXY,
 		resave: false,
 		saveUninitialized: true,
+		name: 'X-Qlik-Session-Hefesto',
+		value: '123456789ABCEFGH',
+		genid: () => '123456789',
 		cookie: {
-			name: 'X-Qlik-Session-Hefesto',
-			value: '123456789ABCEFGH',
-			genid: () => '123456789',
 			path: '/',
 			domain: process.env.SENSE_SERVER,
 			maxAge: 1000 * 60 * 24,

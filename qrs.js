@@ -79,10 +79,10 @@ module.exports = {
         var sessionUser = JSON.parse(sessionUserResponse);
 
         if (sessionUser) {
-          callbackFn(null, sessionUser);
+          callbackFn(null, sessionUser.Session);
         }
         else {
-          callbackFn({ message: "Falha ao excluir a sessão." }, null);
+          callbackFn({ message: "Falha ao excluir a sessão " + sessionId }, null);
         }
       }
     });

@@ -1,8 +1,7 @@
-var https = require('https');
 var fs = require('fs');
+var https = require('https');
 var crypto = require('crypto');
-var QRS = "4242";
-var QPS = "4243";
+var uuidv4 = require('uuid/v4');
 
 module.exports = {
   getTicket: function(user, callbackFn) {
@@ -11,7 +10,7 @@ module.exports = {
       UserId: user
     };
 
-    this.qPost(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/ticket/", data, function(err, ticketResponse) {
+    this.qPost(process.env.QPS_PORT, ("/qps/" + process.env.SENSE_PROXY) + "/ticket/", data, function(err, ticketResponse) {
       if (err) {
         callbackFn(err);
       }
@@ -26,10 +25,34 @@ module.exports = {
       }
     });
   },
+  createSession: function(user, callbackFn) {
+    var data = {
+      UserDirectory: process.env.USER_DIRECTORY,
+      UserId: user,
+      Attributes: [],
+      SessionId: uuidv4()
+    };
+
+    this.qPost(process.env.QPS_PORT, ("/qps/" + process.env.SENSE_PROXY) + "/session/", data, function(err, newSessionResponse) {
+      if (err) {
+        callbackFn(err);
+      }
+      else {
+        var session = JSON.parse(newSessionResponse);
+
+        if (session.SessionId) {
+          callbackFn(null, session);
+        }
+        else {
+          callbackFn(null);
+        }
+      }
+    });
+  },
   getSessions: function(user, callbackFn) {
     var me = this;
 
-    me.qGet(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/", function(err, sessionsResponse) {
+    me.qGet(process.env.QPS_PORT, ("/qps/" + process.env.SENSE_PROXY) + "/session/", function(err, sessionsResponse) {
       if (err) {
         callbackFn(err);
       } else {
@@ -46,10 +69,10 @@ module.exports = {
       }
     });
   },
-  logout: function(sessionId, callbackFn) {
+  removeSession: function(sessionId, callbackFn) {
     var me = this;
 
-    me.qDelete(QPS, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + sessionId, function(err, sessionUserResponse) {
+    me.qDelete(process.env.QPS_PORT, ("/qps/" + process.env.SENSE_PROXY) + "/session/" + sessionId, function(err, sessionUserResponse) {
       if (err) {
         callbackFn(err);
       } else {

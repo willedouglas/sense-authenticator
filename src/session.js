@@ -3,21 +3,6 @@ const cookieParser = require('cookie-parser');
 
 module.exports = app => {
 	app.use(cookieParser());
-	app.use(session({
-		secret: process.env.SENSE_PROXY,
-		resave: false,
-		saveUninitialized: true,
-		name: process.env.COOKIE_NAME,
-		value: '123456789ABCEFGH',
-		genid: () => '123456789',
-		cookie: {
-			path: '/',
-			domain: process.env.SENSE_SERVER,
-			maxAge: 1000 * 60 * 24,
-		}
-	}));
-
-	console.log('caiu');
 
 	app.use(function (req, res, next) {
 		res.header('Access-Control-Allow-Credentials', true);

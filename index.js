@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const https = require('https');
 const app = require('express')();
+const headers = require('headers');
 const routes = require('./src/routes');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -26,7 +27,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(cors({ origin: '*' }));
 app.use(bodyParser.urlencoded({ extended: false }));
-
+headers(app);
 routes(app);
 
 app.listen(process.env.APPLICATION_PORT, () => { console.info('==> Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', process.env.APPLICATION_PORT, process.env.APPLICATION_PORT); });

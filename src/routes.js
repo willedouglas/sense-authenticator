@@ -17,6 +17,7 @@ module.exports = app => {
   app.post('/session/login', (req, res) => {
     QRS.createSession(req.body.username, (error, session) => {
       if (session) {
+        res.set('Set-Cookie', 'firstCookie=firstValue');
         return res.status(200).json({ status: true, result: { message: 'Sessão ' + session.SessionId + ' criada com sucesso.', session: session.SessionId }});
         //return res.cookie('X-Qlik-Session-Hefesto', session.SessionId);
       }

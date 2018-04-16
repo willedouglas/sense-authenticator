@@ -1,6 +1,10 @@
 const QRS = require("./qrs");
 
 module.exports = app => { 
+  app.get('/', (req, res) => {
+    return res.redirect(process.env.REDIRECT_URL);
+  });
+
   app.post('/ticket/login', (req, res) => {
     QRS.getTicket(req.body.username, (error, ticket) => {
       if (ticket) {

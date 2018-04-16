@@ -57,8 +57,8 @@ app.get('/session/:session_user', (req, res) => {
 });
 
 
-app.delete('/logout/:session_user', (req, res) => {
-  QRS.logout(req.params.session_user, (error, session) => {
+app.delete('/logout/:session_id', (req, res) => {
+  QRS.logout(req.params.session_id, (error, session) => {
     if (session) {
       return res.status(200).json({ status: true, result: { message: 'Você saiu do portal.', session: session.sessionId }});  
     } 

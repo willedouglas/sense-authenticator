@@ -1,6 +1,7 @@
 module.exports = {
   SENSE_SERVER: '18.216.66.88',
   SENSE_PORT: 443,
+  COOKIE_NAME: 'X-Qlik-Session-Hefesto',
   QRS_PORT: 4242,
   QPS_PORT: 4243,
   SENSE_PROXY: 'hefesto',

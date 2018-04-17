@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require('path');
 const https = require('https');
 const app = require('express')();
-const session = require('./src/session');
+const headers = require('./src/headers');
 const routes = require('./src/routes');
 const bodyParser = require('body-parser');
 
@@ -23,7 +23,7 @@ process.env.certPath = path.join(__dirname, 'config/certificates');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-session(app);
+headers(app);
 routes(app);
 
 app.listen(process.env.APPLICATION_PORT, () => { console.info('==> Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', process.env.APPLICATION_PORT, process.env.APPLICATION_PORT); });

@@ -17,11 +17,11 @@ Module to authenticate in anyone Qlik Sense Enterprise server using Certificates
 
 ## Routes
 
-| ROUTE                                            | METHOD | WHAT DO?                                                       |
+| Route                                            | Method | What Do?                                                       |
 | ------------------------------------------------ |:------:| --------------------------------------------------------------:|
-| localhost:APPLICATION_PORT/                      | GET    | Redirect to path defined in config/config.js REDIRECT_URL.     |
-| localhost:APPLICATION_PORT/session/:user_id      | POST   | Request new session to user defined in URL parameter.          |
-| localhost:APPLICATION_PORT/session/:session_id   | GET    | Get details from specified session defined in URL parameter.   |
-| localhost:APPLICATION_PORT/session/              | GET    | Get all opened sessions from specified server.                 |
-| localhost:APPLICATION_PORT/ticket/:user_id       | POST   | Request new ticket to user defined in URL parameter.           |
-| localhost:APPLICATION_PORT/logout/:session_id    | DELETE | Delete session specified in URL parameter.                     |
+| localhost:port/                                  | GET    | Redirect to path defined in config/config.js REDIRECT_URL.     |
+| localhost:port/session/:user_id                  | POST   | Request new session to user defined in URL parameter.          |
+| localhost:port/session/:session_id               | GET    | Get details from specified session defined in URL parameter.   |
+| localhost:port/session/                          | GET    | Get all opened sessions from specified server.                 |
+| localhost:port/ticket/:user_id                   | POST   | Request new ticket to user defined in URL parameter.           |
+| localhost:port/logout/:session_id                | DELETE | Delete session specified in URL parameter.                     |

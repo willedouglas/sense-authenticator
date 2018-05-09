@@ -1,5 +1,5 @@
 {
-  "name": "sense-ticket-server",
+  "name": "sense-authenticator",
   "version": "1.0.0",
   "description": "Using nodeJS to Authenticate in Qlik Sense Enterprise Server.",
   "main": "index.js",

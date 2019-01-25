@@ -112,7 +112,7 @@ module.exports = {
       method: 'GET',
       headers: {
         'x-qlik-xrfkey': xrfkey,
-        'X-Qlik-User': 'UserDirectory= Internal;UserId= sa_repository'
+        'Content-Type': 'application/json',
       },
       key: key,
       cert: cert,
@@ -160,7 +160,6 @@ module.exports = {
       headers: {
         'x-qlik-xrfkey': xrfkey,
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
       },
       key: key,
       cert: cert,
@@ -207,9 +206,7 @@ module.exports = {
       method: 'POST',
       headers: {
         'x-qlik-xrfkey': xrfkey,
-        'X-Qlik-User': 'UserDirectory= Internal;UserId= sa_repository',
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
       },
       key: key,
       cert: cert,
